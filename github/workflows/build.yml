@@ -1,0 +1,57 @@
+name: Build Dlarp Container
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Compile Dlarp iOS Application
+        run: |
+          set -e
+          rm -rf Payload Dlarp.ipa
+          mkdir -p Payload/Dlarp.app
+          
+          xcrun -sdk iphoneos clang -arch arm64 -fobjc-arc dlarp_main.m \
+            -o Payload/Dlarp.app/Dlarp \
+            -framework UIKit -framework Foundation -framework CoreGraphics
+
+          chmod +x Payload/Dlarp.app/Dlarp
+
+          cat << 'EOF' > Payload/Dlarp.app/Info.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleIdentifier</key>
+              <string>com.dlarp.container.app</string>
+              <key>CFBundleName</key>
+              <string>Dlarp</string>
+              <key>CFBundleExecutable</key>
+              <string>Dlarp</string>
+              <key>CFBundleVersion</key>
+              <string>1.0</string>
+              <key>CFBundleShortVersionString</key>
+              <string>1.0</string>
+              <key>LSRequiresIPhoneOS</key>
+              <true/>
+              <key>MinimumOSVersion</key>
+              <string>15.0</string>
+          </dict>
+          </plist>
+          EOF
+
+          zip -r Dlarp.ipa Payload
+
+      - name: Upload Dlarp Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dlarp-Container-IPA
+          path: Dlarp.ipa
