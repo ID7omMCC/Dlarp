@@ -1,69 +1,70 @@
 #import <UIKit/UIKit.h>
 
-@interface DlarpMainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
-@property (nonatomic, strong) UITableView *appTableView;
-@property (nonatomic, strong) NSMutableArray *appList;
+@interface Dlarp999xViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *appsArray;
 @end
 
-@implementation DlarpMainViewController
+@implementation Dlarp999xViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Dlarp Hub - حاوية التطبيقات";
-    self.view.backgroundColor = [UIColor systemBackgroundColor];
+    self.title = @"Dlarp Hub [999x Mode]";
     
-    self.appList = [NSMutableArray arrayWithArray:@[
-        @{ @"name": @"Discord Larp Edition", @"version": @"v1.0", @"status": @"جاهز للتشغيل" },
-        @{ @"name": @"Custom Chat Mod", @"version": @"v2.1", @"status": @"مفعل بالكامل" }
+    self.view.backgroundColor = [UIColor colorWithRed:0.08 green:0.08 blue:0.12 alpha:1.0];
+    
+    self.appsArray = [NSMutableArray arrayWithArray:@[
+        @{ @"name": @"Discord (999x Larp Edition)", @"status": @"جاهز للحقن وتعديل المحادثات", @"badge": @"999x" },
+        @{ @"name": @"Custom Chat Bypasser", @"status": @"مفعل - فك القيود بالكامل", @"badge": @"VIP" },
+        @{ @"name": @"Social Hub & Requests", @"status": @"مراقبة المضافين وتعديل الطلبات", @"badge": @"Active" }
     ]];
     
-    self.appTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleInsetGrouped];
-    self.appTableView.dataSource = self;
-    self.appTableView.delegate = self;
-    [self.view addSubview:self.appTableView];
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleInsetGrouped];
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self.view addSubview:self.tableView];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.appList.count;
+    return self.appsArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"DlarpCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    static NSString *cellID = @"Cell999x";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellID];
     }
     
-    NSDictionary *app = self.appList[indexPath.row];
-    cell.textLabel.text = app[@"name"];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"الإصدار: %@ | الحالة: %@", app[@"version"], app[@"status"]];
-    cell.imageView.image = [UIImage systemImageNamed:@"app.badge.fill"];
+    NSDictionary *appInfo = self.appsArray[indexPath.row];
+    cell.backgroundColor = [UIColor colorWithRed:0.12 green:0.12 blue:0.18 alpha:1.0];
+    cell.textLabel.text = appInfo[@"name"];
+    cell.textLabel.textColor = [UIColor white];
+    cell.detailTextLabel.text = appInfo[@"status"];
+    cell.detailTextLabel.textColor = [UIColor systemGreenColor];
     
-    UIButton *openButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [openButton setTitle:@"فتح" forState:UIControlStateNormal];
-    openButton.frame = CGRectMake(0, 0, 70, 32);
-    openButton.backgroundColor = [UIColor systemBlueColor];
-    [openButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    openButton.layer.cornerRadius = 8;
-    openButton.tag = indexPath.row;
-    [openButton addTarget:self action:@selector(openAppTapped:) forControlEvents:UIControlEventTouchUpInside];
-    cell.accessoryView = openButton;
+    UIButton *launchBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [launchBtn setTitle:@"تشغيل 999x" forState:UIControlStateNormal];
+    launchBtn.frame = CGRectMake(0, 0, 90, 36);
+    launchBtn.backgroundColor = [UIColor systemIndigoColor];
+    [launchBtn setTitleColor:[UIColor white] forState:UIControlStateNormal];
+    launchBtn.layer.cornerRadius = 10;
+    launchBtn.tag = indexPath.row;
+    [launchBtn addTarget:self action:@selector(launch999xAction:) forControlEvents:UIControlEventTouchUpInside];
+    cell.accessoryView = launchBtn;
     
     return cell;
 }
 
-- (void)openAppTapped:(UIButton *)sender {
-    NSDictionary *app = self.appList[sender.tag];
-    NSString *msg = [NSString stringWithFormat:@"جاري تشغيل بيئة الـ Larping لـ [%@] وتجاوز قيود النظام بنجاح!", app[@"name"]];
+- (void)launch999xAction:(UIButton *)sender {
+    NSDictionary *appInfo = self.appsArray[sender.tag];
+    NSString *msg = [NSString hrefStringWithFormat:@"تم تفعيل وضع 999x الخارق على [%@] بنجاح! جاري تجاوز الحماية وفتح بيئة الـ Larping الكاملة.", appInfo[@"name"]];
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Dlarp Container" 
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@" Dlarp 999x Engine" 
                                message:msg 
                                preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"حسناً" style:UIAlertActionStyleDefault handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"إغلاق" style:UIAlertActionStyleDestructive handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -77,9 +78,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary * _Nullable)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    DlarpMainViewController *mainVC = [[DlarpMainViewController alloc] init];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:mainVC];
-    self.window.rootViewController = navController;
+    Dlarp999xViewController *vc = [[Dlarp999xViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav.navigationBar.barStyle = UIBarStyleBlack;
+    self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     return YES;
 }
