@@ -40,7 +40,7 @@
     NSDictionary *appInfo = self.appsArray[indexPath.row];
     cell.backgroundColor = [UIColor colorWithRed:0.12 green:0.12 blue:0.18 alpha:1.0];
     cell.textLabel.text = appInfo[@"name"];
-    cell.textLabel.textColor = [UIColor white];
+    cell.textLabel.textColor = [UIColor whiteColor];
     cell.detailTextLabel.text = appInfo[@"status"];
     cell.detailTextLabel.textColor = [UIColor systemGreenColor];
     
@@ -48,7 +48,7 @@
     [launchBtn setTitle:@"تشغيل 999x" forState:UIControlStateNormal];
     launchBtn.frame = CGRectMake(0, 0, 90, 36);
     launchBtn.backgroundColor = [UIColor systemIndigoColor];
-    [launchBtn setTitleColor:[UIColor white] forState:UIControlStateNormal];
+    [launchBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     launchBtn.layer.cornerRadius = 10;
     launchBtn.tag = indexPath.row;
     [launchBtn addTarget:self action:@selector(launch999xAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -59,9 +59,9 @@
 
 - (void)launch999xAction:(UIButton *)sender {
     NSDictionary *appInfo = self.appsArray[sender.tag];
-    NSString *msg = [NSString hrefStringWithFormat:@"تم تفعيل وضع 999x الخارق على [%@] بنجاح! جاري تجاوز الحماية وفتح بيئة الـ Larping الكاملة.", appInfo[@"name"]];
+    NSString *msg = [NSString stringWithFormat:@"تم تفعيل وضع 999x الخارق على [%@] بنجاح! جاري تجاوز الحماية وفتح بيئة الـ Larping الكاملة.", appInfo[@"name"]];
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@" Dlarp 999x Engine" 
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"🚀 Dlarp 999x Engine" 
                                message:msg 
                                preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"إغلاق" style:UIAlertActionStyleDestructive handler:nil]];
@@ -77,7 +77,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary * _Nullable)launchOptions {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window = [[UIWindow alloc] init];
     Dlarp999xViewController *vc = [[Dlarp999xViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     nav.navigationBar.barStyle = UIBarStyleBlack;
