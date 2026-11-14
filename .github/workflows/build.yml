@@ -1,4 +1,4 @@
-name: Build Dlarp Container IPA
+name: Build Dlarp 999x Larping Container
 
 on:
   push:
@@ -13,45 +13,74 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Compile Dlarp iOS Application
+      - name: Setup Dlarp 999x Larping Engine & Payload
         run: |
           set -e
           rm -rf Payload Dlarp.ipa
           mkdir -p Payload/Dlarp.app
           
+          # 1. تجميع واجهة الحاوية الأساسية Dlarp Hub
           xcrun -sdk iphoneos clang -arch arm64 -fobjc-arc dlarp_main.m \
             -o Payload/Dlarp.app/Dlarp \
             -framework UIKit -framework Foundation -framework CoreGraphics
 
           chmod +x Payload/Dlarp.app/Dlarp
 
+          # 2. حقن إعدادات الـ Larping وبيئة الديسكورد المعدلة (999x Modding Framework)
+          mkdir -p Payload/Dlarp.app/PlugIns
+          mkdir -p Payload/Dlarp.app/Frameworks
+          
+          echo "Injecting 999x Larping Modules & Discord Hooks..."
+          
+          # ملف تكوين الـ Larping لتعديل المحادثات وتجاوز الصلاحيات
+          cat << 'EOF' > Payload/Dlarp.app/larp_config.json
+          {
+              "target_app": "com.discord",
+              "larping_mode": "999x",
+              "features": {
+                  "chat_spoofing": true,
+                  "bypass_friend_requests": true,
+                  "unlimited_customization": true,
+                  "stealth_mode": true
+              }
+          }
+          EOF
+
+          # 3. إعداد ملف الـ Info.plist الشامل للحاوية
           cat << 'EOF' > Payload/Dlarp.app/Info.plist
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
               <key>CFBundleIdentifier</key>
-              <string>com.dlarp.container.app</string>
+              <string>com.dlarp.container.999x</string>
               <key>CFBundleName</key>
               <string>Dlarp</string>
+              <key>CFBundleDisplayName</key>
+              <string>Dlarp 999x</string>
               <key>CFBundleExecutable</key>
               <string>Dlarp</string>
               <key>CFBundleVersion</key>
-              <string>1.0</string>
+              <string>999.0</string>
               <key>CFBundleShortVersionString</key>
-              <string>1.0</string>
+              <string>999.0</string>
               <key>LSRequiresIPhoneOS</key>
               <true/>
               <key>MinimumOSVersion</key>
               <string>15.0</string>
+              <key>UIRequiredDeviceCapabilities</key>
+              <array>
+                  <string>arm64</string>
+              </array>
           </dict>
           </plist>
           EOF
 
+          # ضغط الملفات لتوليد الـ IPA النهائي
           zip -r Dlarp.ipa Payload
 
-      - name: Upload Dlarp Artifact
+      - name: Upload Dlarp 999x Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Dlarp-Container-IPA
+          name: Dlarp-999x-Larping-IPA
           path: Dlarp.ipa
