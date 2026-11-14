@@ -1,4 +1,4 @@
-name: Build Dlarp Container
+name: Build Dlarp Container IPA
 
 on:
   push:
